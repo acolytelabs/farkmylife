@@ -33,14 +33,49 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <script>
+    // Prevent browser from stealing game keys
+    window.addEventListener('keydown', function(e) {
+      if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
+           'KeyE','KeyW','KeyI','KeyQ','KeyR','KeyP','Tab','Escape','Enter',
+           'Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9'
+          ].includes(e.code)) {
+        e.preventDefault();
+      }
+    });
+    // Auto-focus Flutter on load by simulating Tab
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab', code: 'Tab', bubbles: true}));
+        document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'Tab', code: 'Tab', bubbles: true}));
+        // Also try clicking the Flutter element
+        var targets = [
+          document.querySelector('flutter-view'),
+          document.querySelector('flt-glass-pane'),
+          document.querySelector('canvas'),
+          document.body
+        ];
+        for (var t of targets) {
+          if (t) { t.setAttribute('tabindex', '0'); t.focus(); break; }
+        }
+      }, 1000);
+      // Second attempt after Flutter fully loads
+      setTimeout(function() {
+        document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab', code: 'Tab', bubbles: true}));
+        document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'Tab', code: 'Tab', bubbles: true}));
+      }, 2500);
+    });
+    document.addEventListener('click', function() {
+      var targets = [
+        document.querySelector('flutter-view'),
+        document.querySelector('flt-glass-pane'),
+        document.querySelector('canvas')
+      ];
+      for (var t of targets) {
+        if (t) { t.focus(); break; }
+      }
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
