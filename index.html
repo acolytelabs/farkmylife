@@ -33,14 +33,33 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Ensure Flutter canvas gets keyboard focus
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var canvas = document.querySelector('flt-glass-pane') || document.querySelector('canvas');
+        if (canvas) {
+          canvas.setAttribute('tabindex', '0');
+          canvas.focus();
+          canvas.addEventListener('click', function() { canvas.focus(); });
+        }
+        // Fallback: focus the body and forward keys
+        document.body.setAttribute('tabindex', '0');
+        document.body.focus();
+        document.addEventListener('click', function() {
+          var c = document.querySelector('flt-glass-pane') || document.querySelector('canvas');
+          if (c) c.focus();
+        });
+      }, 1000);
+    });
+    // Prevent browser shortcuts from stealing focus
+    window.addEventListener('keydown', function(e) {
+      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyE', 'KeyW', 'KeyI', 'KeyQ', 'Tab'].includes(e.code)) {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>
+
