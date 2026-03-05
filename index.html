@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+  flt-glass-pane {
+    outline: none !important;
+  }
+  body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+</style>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -35,31 +45,14 @@
 <body>
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    // Ensure Flutter canvas gets keyboard focus
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        var canvas = document.querySelector('flt-glass-pane') || document.querySelector('canvas');
-        if (canvas) {
-          canvas.setAttribute('tabindex', '0');
-          canvas.focus();
-          canvas.addEventListener('click', function() { canvas.focus(); });
-        }
-        // Fallback: focus the body and forward keys
-        document.body.setAttribute('tabindex', '0');
+    document.addEventListener('click', function() {
+      if (document.activeElement !== document.body) {
         document.body.focus();
-        document.addEventListener('click', function() {
-          var c = document.querySelector('flt-glass-pane') || document.querySelector('canvas');
-          if (c) c.focus();
-        });
-      }, 1000);
-    });
-    // Prevent browser shortcuts from stealing focus
-    window.addEventListener('keydown', function(e) {
-      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyE', 'KeyW', 'KeyI', 'KeyQ', 'Tab'].includes(e.code)) {
-        e.preventDefault();
       }
     });
+    document.body.setAttribute('tabindex', '0');
   </script>
 </body>
 </html>
+
 
