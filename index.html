@@ -1,81 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="/farkmylife/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
+  <meta name="description" content="Fark My Life - A dice RPG">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="fark_my_life">
+  <meta name="apple-mobile-web-app-title" content="Fark My Life">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>fark_my_life</title>
+  <title>Fark My Life</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body { margin: 0; overflow: hidden; background: #000; }
+  </style>
 </head>
 <body>
+  <script src="flutter_bootstrap.js" async></script>
   <script>
-    // Prevent browser from stealing game keys
+    // Prevent browser from intercepting game keys (scroll, tab-switch, etc.)
     window.addEventListener('keydown', function(e) {
       if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
-           'KeyE','KeyW','KeyI','KeyQ','KeyR','KeyP','Tab','Escape','Enter',
-           'Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9'
+           'KeyE','KeyW','KeyI','KeyQ','KeyR','KeyP','Tab','Escape',
+           'Enter','ShiftLeft','ShiftRight',
+           'Digit1','Digit2','Digit3','Digit4','Digit5',
+           'Digit6','Digit7','Digit8','Digit9'
           ].includes(e.code)) {
         e.preventDefault();
       }
-    });
-    // Auto-focus Flutter on load by simulating Tab
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab', code: 'Tab', bubbles: true}));
-        document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'Tab', code: 'Tab', bubbles: true}));
-        // Also try clicking the Flutter element
-        var targets = [
-          document.querySelector('flutter-view'),
-          document.querySelector('flt-glass-pane'),
-          document.querySelector('canvas'),
-          document.body
-        ];
-        for (var t of targets) {
-          if (t) { t.setAttribute('tabindex', '0'); t.focus(); break; }
-        }
-      }, 1000);
-      // Second attempt after Flutter fully loads
-      setTimeout(function() {
-        document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab', code: 'Tab', bubbles: true}));
-        document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'Tab', code: 'Tab', bubbles: true}));
-      }, 2500);
-    });
-    document.addEventListener('click', function() {
-      var targets = [
-        document.querySelector('flutter-view'),
-        document.querySelector('flt-glass-pane'),
-        document.querySelector('canvas')
-      ];
-      for (var t of targets) {
-        if (t) { t.focus(); break; }
-      }
-    });
+    }, { capture: true });
   </script>
-  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
