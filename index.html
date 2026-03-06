@@ -12,14 +12,11 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
   <title>Fark My Life</title>
   <link rel="manifest" href="manifest.json">
-  <style>
-    body { margin: 0; overflow: hidden; background: #000; }
-  </style>
+  <style>body { margin: 0; overflow: hidden; background: #000; }</style>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    // Prevent browser from intercepting game keys (scroll, tab-switch, etc.)
     window.addEventListener('keydown', function(e) {
       if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
            'KeyE','KeyW','KeyI','KeyQ','KeyR','KeyP','Tab','Escape',
@@ -30,6 +27,33 @@
         e.preventDefault();
       }
     }, { capture: true });
+
+    // Simulate Tab press to give Flutter keyboard focus
+    function sendTab() {
+      window.dispatchEvent(new KeyboardEvent('keydown', {key:'Tab', code:'Tab', keyCode:9, bubbles:true}));
+      window.dispatchEvent(new KeyboardEvent('keyup', {key:'Tab', code:'Tab', keyCode:9, bubbles:true}));
+    }
+
+    // On load: repeated Tab to ensure Flutter gets focus
+    window.addEventListener('load', function() {
+      setTimeout(sendTab, 800);
+      setTimeout(sendTab, 1500);
+      setTimeout(sendTab, 3000);
+    });
+
+    // Every 500ms: if no element inside Flutter has focus, send Tab
+    setInterval(function() {
+      var active = document.activeElement;
+      // If focus is on body or html, Flutter lost it
+      if (!active || active === document.body || active === document.documentElement) {
+        sendTab();
+      }
+    }, 500);
+
+    // On any click, also send Tab
+    document.addEventListener('click', function() {
+      setTimeout(sendTab, 50);
+    });
   </script>
 </body>
 </html>
